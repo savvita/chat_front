@@ -1,0 +1,7 @@
+.subscription-card {
+    transition: transform 200ms ease-in;
+}
+
+.subscription-card:hover {
+    transform: scale(1.02);
+}
