@@ -1,0 +1,23 @@
+
+.sidebar_btn {
+    display: none;
+}
+
+@media screen and (max-width: 992px) {
+    .sidebar_btn {
+        display: block;
+    }
+
+    .sidebar {
+        position: relative;
+        transform: translateX(-250%);
+        width: 0 !important;
+        overflow: hidden;
+        transition: all 200ms ease-in;
+    }
+
+    .sidebar__open {
+        transform: translateX(0%);
+        width: 10rem !important;
+    }
+}
