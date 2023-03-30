@@ -146,6 +146,36 @@ const db_uploadFiles = async (url, files) => {
     return results;
 }
 
+const db_removeFiles = async (url, files) => {
+    if(!files) {
+        return undefined;
+    }
+
+    let results = {};
+    await fetch(url, {
+        method: 'delete',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + token.getToken()
+        },
+        body: JSON.stringify(files),
+    })
+    .then(response => response.json())
+    .then(response => {
+        if(response.token) {
+            token.setToken(response.token);
+        }
+        
+        results = response;
+    })
+    .catch(() => {
+        results = undefined;
+    });
+
+    return results;
+}
+
 const Subscriptions = function() {
     this.url = `${api}/subscriptions`;
     
@@ -253,18 +283,29 @@ const Rekoginition = function () {
         return res;
     }
 
-    this.voice = async function(request) {
-        if(!request) {
+    this.voice = async function(file, lang) {
+        if(!file) {
             return undefined;
         }
-        console.log(request);
 
-        const res = await db_uploadFiles(this.url, [request]);
-        if(!res){
-            return undefined;
-        } 
+        if(!lang) {
+            return await db_uploadFiles(this.url, [file]);
+        }        
+        return await db_uploadFiles(`${ this.url }?lang=${ lang }`, [file]);
+    }
+}
 
-        return res;
+const Files = function() {
+    this.get = async function(file) {
+        if(file) {
+            return await db_get(`${api}/files/file?file=${file}`);
+        }
+
+        return await db_get(`${api}/files`);
+    }
+
+    this.remove = async function (files) {
+        return await db_removeFiles(`${api}/files`, files);
     }
 }
 
@@ -286,7 +327,8 @@ const functions = {
     Bans: new Bans(),
     Shoppings: new Shoppings(),
     Requests: new Requests(),
-    Rekoginition: new Rekoginition()
+    Rekoginition: new Rekoginition(),
+    Files: new Files()
 };
 
 export default functions;

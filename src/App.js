@@ -19,6 +19,7 @@ import MyRequests from './layouts/MyRequests';
 import Shoppings from './layouts/Shoppings';
 import UserShopping from './layouts/UserShopping';
 import Landing from './layouts/Landing';
+import Storage from './layouts/Storage';
 
 
 
@@ -37,8 +38,8 @@ function App() {
               <Route path="about" element={ <About /> } /> 
             </Route>
             <Route path="/admin" element={ <Admin /> }>
-              <Route path="users" element={ <Users /> }>
-              </Route>
+              <Route path="users" element={ <Users /> } />
+              <Route path="storage" element={ <Storage /> } />
               <Route path="users/:id" element={ <UserShopping /> } />
               <Route path="sales" element={ <Shoppings /> } />
             </Route>

@@ -17,7 +17,7 @@ const AdminSidebar = () => {
     const storages = [
         {
             heading: 'Файли',
-            link: 'files'
+            link: 'storage'
         }
     ]
 
