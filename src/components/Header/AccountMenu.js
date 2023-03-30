@@ -11,10 +11,13 @@ const AccountMenu = () => {
     const userInfo = useSelector(selectUserInfo);
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(refresh());
-    }, []);
+    // useEffect(() => {
+    //     dispatch(refresh());
+    // }, []);
 
+    const logOutAsync = async () => {
+        await dispatch(logOut());
+    }
     return (
         <UncontrolledDropdown inNavbar nav className="header__account-menu" style={{ marginRight: '20px' }}>
                 <DropdownToggle caret nav>Мій акаунт</DropdownToggle>
@@ -28,7 +31,7 @@ const AccountMenu = () => {
                             { user && <NavLink tag={RRNavLink} to="/profile" className="pt-1 pb-1"><DropdownItem>Мій профіль</DropdownItem></NavLink> }
                             { user && user.isAdmin && <NavLink tag={RRNavLink} to="/admin" className="pt-1"><DropdownItem>Панель адміна</DropdownItem></NavLink> }
                             <DropdownItem divider className="p-0" />
-                            <NavLink tag={RRNavLink} to="/" onClick={ () => dispatch(logOut()) } className="pt-0"><DropdownItem>Вийти</DropdownItem></NavLink>
+                            <NavLink tag={RRNavLink} to="/" onClick={ logOutAsync } className="pt-0"><DropdownItem>Вийти</DropdownItem></NavLink>
                         </>
                     }
                 </DropdownMenu>

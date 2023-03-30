@@ -12,8 +12,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
   export const rekognizeVoiceAsync = createAsyncThunk(
     'rekognition/voice',
-    async (voice) => {
-      const response = await db.Rekoginition.voice(voice);
+    async (props) => {
+      const response = await db.Rekoginition.voice(props.file, props.lang);
       return response;
     }
   );

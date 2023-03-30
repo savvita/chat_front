@@ -36,6 +36,23 @@ const VoiceRequestForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const langs = [
+        // {
+        //     code: "uk-UA",
+        //     description: 'Українська'
+        // },
+        {
+            code: "en-US",
+            description: 'Англійська'
+        },
+        {
+            code: "ru-RU",
+            description: 'Російська'
+        },
+    ];
+
+    const [lang, setLang] = useState(langs[0]);
+
     useEffect(() => {
         dispatch(reset());
     }, []);
@@ -68,7 +85,6 @@ const VoiceRequestForm = () => {
         const duration = await getBlobDuration(blob)
 
         if(duration > 15) {
-            console.log(1)
             setIsValid(false);
             setInfoHeader('Завеликий файл');
             setInfoText('Аудіо має бути не більше 15 секунд');
@@ -100,7 +116,7 @@ const VoiceRequestForm = () => {
                 return;
             }
             setIsProccessing(true);
-            const res = await dispatch(rekognizeVoiceAsync(file.file));
+            const res = await dispatch(rekognizeVoiceAsync({ file: file.file, lang: lang }));
 
             if(res && res.payload && res.payload.value) {
                 await getResponse(res.payload.value);
@@ -118,7 +134,7 @@ const VoiceRequestForm = () => {
             }
     
             const res = await dispatch(textAsync(request));
-            console.log(res);
+
 
             if(!res || !res.payload) {
                 setInfoHeader('Помилка');
@@ -151,16 +167,23 @@ const VoiceRequestForm = () => {
     return (
         <div className="p-3">
             <Row>
-                <Input className="ms-2 me-2 mb-3" name="file" type="file" onChange={ handleFile } />
+                <Input className="ms-2 me-2 mb-1" name="file" type="file" onChange={ handleFile } />
                 <AudioRecorder onRecordStop={ handleRecord } />
             </Row>
             <Row>
                 <audio controls src={ file && file.src } />
-                {/* <audio controls onLoadedData={ checkFile } src={ file && file.src } /> */}
-                <div className="image-request__image-preview border border-light rounded-1 mb-3">
-                </div>
-                <Button className="mt-3" onClick={ rekognize }>Надіслати</Button>
             </Row>
+            { file && <Row className="mt-3">
+                <Col xs="12" md="6" className="d-flex align-items-center">
+                    <Label className="text-white p-2">Мова:</Label>
+                    <Input name="select" type="select" value={ lang } onChange={ (e) => setLang(e.target.value) } style={{ minWidth: '10rem' }}>
+                        { langs.map((item, idx) => <option key={ idx } value={ item.code }>{ item.description }</option>)}
+                    </Input>
+                </Col>
+                <Col xs="12" md="6" className="text-center">
+                    <Button onClick={ rekognize }>Надіслати</Button>
+                </Col>
+            </Row> }
             { isProccessing && <Row>
                 <Col lg="6" md="12">
                     <div className={ rekoginitionStatus !== 'loading' ? "mt-3" : "d-none" }>

@@ -25,7 +25,7 @@ const AudioRecorder = ({ onRecordStop }) => {
                 setPermission(true);
                 setStream(streamData);
             } catch (err) {
-                alert(err.message);
+                alert("Мікрофон не знайдено");
             }
         } else {
             alert("The MediaRecorder API is not supported in your browser.");
@@ -67,9 +67,8 @@ const AudioRecorder = ({ onRecordStop }) => {
     
     return (
         <div>
-            <h2>Audio Recorder</h2>
             <main>
-                <div className="audio-controls">
+                <div className="audio-controls text-center">
                     {!permission ? (
                     <Button onClick={getMicrophonePermission}>
                         Перевірити мікрофон

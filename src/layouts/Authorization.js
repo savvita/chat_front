@@ -61,7 +61,7 @@ const Authorization = ({ signIn, signUp }) => {
             return;
         }
 
-        navigate("/");
+        navigate("/requests");
     }
 
     const showError = (title, text) => {
