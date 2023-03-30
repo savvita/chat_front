@@ -2,11 +2,12 @@
 
 
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { Button } from "reactstrap";
 
 
-const AudioRecorder = () => {
-    const mimeType = "video/webm";
+const AudioRecorder = ({ onRecordStop }) => {
+    const mimeType = "audio/weba";
     const [permission, setPermission] = useState(false);
     const mediaRecorder = useRef(null);
     const [recordingStatus, setRecordingStatus] = useState("inactive");
@@ -30,6 +31,7 @@ const AudioRecorder = () => {
             alert("The MediaRecorder API is not supported in your browser.");
         }
     };
+
 
     const startRecording = async () => {
         setRecordingStatus("recording");
@@ -58,6 +60,7 @@ const AudioRecorder = () => {
           //creates a playable URL from the blob file.
            const audioUrl = URL.createObjectURL(audioBlob);
            setAudio(audioUrl);
+           onRecordStop && onRecordStop(audioBlob);
            setAudioChunks([]);
         };
       };
@@ -68,29 +71,29 @@ const AudioRecorder = () => {
             <main>
                 <div className="audio-controls">
                     {!permission ? (
-                    <button onClick={getMicrophonePermission} type="button">
-                        Get Microphone
-                    </button>
+                    <Button onClick={getMicrophonePermission}>
+                        Перевірити мікрофон
+                    </Button>
                     ) : null}
                     {permission && recordingStatus === "inactive" ? (
-                    <button onClick={startRecording} type="button">
+                    <Button onClick={startRecording}>
                         Start Recording
-                    </button>
+                    </Button>
                     ) : null}
                     {recordingStatus === "recording" ? (
-                    <button onClick={stopRecording} type="button">
+                    <Button onClick={stopRecording}>
                         Stop Recording
-                    </button>
+                    </Button>
                     ) : null}
                 </div>
-                {audio ? (
+                {/* {audio ? (
                     <div className="audio-container">
                         <audio src={audio} controls></audio>
                         <a download href={audio}>
                             Download Recording
                         </a>
                     </div>
-                    ) : null}
+                    ) : null} */}
             </main>
         </div>
     );

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Col, FormFeedback, FormGroup, Input, Label, Row, Spinner } from "reactstrap";
-
+import getBlobDuration from 'get-blob-duration'
 
 
 import InfoModal from "../InfoModal";
@@ -55,9 +55,28 @@ const VoiceRequestForm = () => {
         reader.onload = (function() {
             return function (e) { 
                 setFile({ src: e.target.result, file: file });
+                checkFile(e);
             };
         })();
         reader.readAsDataURL(file);
+    }
+
+    const handleRecord = async (blob) => {
+        const audioUrl = URL.createObjectURL(blob);
+        setFile({ src: audioUrl, file: blob });
+
+        const duration = await getBlobDuration(blob)
+
+        if(duration > 15) {
+            console.log(1)
+            setIsValid(false);
+            setInfoHeader('Завеликий файл');
+            setInfoText('Аудіо має бути не більше 15 секунд');
+            setInfoModal(true);
+        }
+        else {
+            setIsValid(true);
+        }
     }
 
     const checkFile = (e) => {
@@ -90,7 +109,6 @@ const VoiceRequestForm = () => {
     }
 
     const getResponse = async(request) => {
-        console.log(request);
         if(!user) {
             navigate('signin');
         }
@@ -134,10 +152,11 @@ const VoiceRequestForm = () => {
         <div className="p-3">
             <Row>
                 <Input className="ms-2 me-2 mb-3" name="file" type="file" onChange={ handleFile } />
-                <AudioRecorder />
+                <AudioRecorder onRecordStop={ handleRecord } />
             </Row>
             <Row>
-                <audio controls onLoadedData={ checkFile } src={ file && file.src } />
+                <audio controls src={ file && file.src } />
+                {/* <audio controls onLoadedData={ checkFile } src={ file && file.src } /> */}
                 <div className="image-request__image-preview border border-light rounded-1 mb-3">
                 </div>
                 <Button className="mt-3" onClick={ rekognize }>Надіслати</Button>

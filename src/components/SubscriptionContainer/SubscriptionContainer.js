@@ -9,7 +9,7 @@ import { createAsync } from '../../app/shoppingSlice';
 import SubscriptionCard from "./SubscriptionCard";
 
 import './SubscriptionContainer.css';
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import PaymentModal from "./PaymentModal";
 import InfoModal from "../InfoModal";
 
@@ -35,7 +35,8 @@ const SubscriptionContainer = () => {
 
     const buy = async () => {
         if(!user) {
-            navigate('signin');
+            // navigate('/signin');
+            return <Navigate to="/signin" />
         }
         else {
             if(!item) {

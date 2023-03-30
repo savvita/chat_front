@@ -257,6 +257,7 @@ const Rekoginition = function () {
         if(!request) {
             return undefined;
         }
+        console.log(request);
 
         const res = await db_uploadFiles(this.url, [request]);
         if(!res){
