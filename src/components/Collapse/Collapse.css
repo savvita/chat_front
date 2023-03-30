@@ -1,0 +1,13 @@
+.collapsed-group__heading::after {
+    content: '+';
+    color: #fff;
+    position: absolute;
+    right: 3px;
+}
+
+.collapsed-group__heading.opened::after {
+    content: '-';
+    color: #fff;
+    position: absolute;
+    right: 3px;
+}
